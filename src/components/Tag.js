@@ -1,28 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
+import useGif from "../hooks/useGif";
 
 const Tag = () => {
-  const [gif, setGif] = useState("");
-  const [loading, setLoading] = useState(false);
   const [tag, setTag] = useState("car");
 
-  async function fetchData() {
-    setLoading(true);
-    const url = `https://api.giphy.com/v1/gifs/random?api_key=w9WqCHFlEBMYhVEMDaJHar67PY49eflF&tag=${tag}`;
-    const { data } = await axios.get(url);
-    const imgSource = data.data.images.downsized_large.url;
-    setGif(imgSource);
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  function clickHandler() {
-    fetchData();
-  }
+  const { gif, loading, fetchData } = useGif(tag);
 
   return (
     <div
@@ -43,7 +27,7 @@ const Tag = () => {
 
       <button
         className="w-10/12 bg-yellow-500 text-lg py-2 rounded-lg mb-[20px]"
-        onClick={clickHandler}
+        onClick={() => fetchData(tag)}
       >
         Generate
       </button>
